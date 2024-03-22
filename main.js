@@ -1,56 +1,47 @@
-//Name:Ashar Asad
-//Date:2024/03/22
-//Description: In this file we have created all of our code to go with
-//our html file and this contains the script to allow random storys
-//to be generated when a name is enterd
-//
+const image =document.createElement("img");
+image.src 
 
 
 
+var displayedImage = document.querySelector('.displayed-img');
+var thumbBar = document.querySelector('.thumb-bar');
 
-// 1. COMPLETE VARIABLE AND FUNCTION DEFINITIONS
-const customName = document.getElementById('customname');
-const randomize = document.querySelector('.randomize');
-const story = document.querySelector('.story');
+btn = document.querySelector('button');
+var overlay = document.querySelector('.overlay');
 
-function randomValueFromArray(array) {
-  const random = Math.floor(Math.random() * array.length);
-  return array[random];
+/* Looping through images */
+  function thumbnailLoop() {
+  var i;
+  for (i = 0; i < 5; i++) {
+  var newImage = document.createElement('img');
+  newImage.setAttribute('src', "images/pic" + (i+1) + ".jpg");
+  thumbBar.appendChild(newImage);
+}
 }
 
-// 2. RAW TEXT STRINGS
-const storyText = "It was 94 fahrenheit outside, so :insertx: went for a walk. When they got to :inserty:, they stared in horror for a few moments, then :insertz:. Bob saw the whole thing, but was not surprised — :insertx: weighs 300 pounds, and it was a hot day.";
-const insertX = ['Willy the Goblin', 'Big Daddy', 'Father Christmas'];
-const insertY = ['the soup kitchen', 'Disneyland', 'the White House'];
-const insertZ = ['spontaneously combusted', 'melted into a puddle on the sidewalk', 'turned into a slug and crawled away'];
+thumbnailLoop();
 
-// 3. EVENT LISTENER AND PARTIAL FUNCTION DEFINITION
-randomize.addEventListener('click', result);
+/* Making the clicked thumbnail the large image */
 
-function result() {
-  let newStory = storyText;
-
-  const xItem = randomValueFromArray(insertX);
-  const yItem = randomValueFromArray(insertY);
-  const zItem = randomValueFromArray(insertZ);
-
-  newStory = newStory.replace(":insertx:", xItem);
-  newStory = newStory.replace(":inserty:", yItem);
-  newStory = newStory.replace(":insertz:", zItem);
-
-  if (customName.value !== '') {
-    const name = customName.value;
-    newStory = newStory.replace('Bob', name);
-  }
-
-  if (document.getElementById("uk").checked) {
-    const weight = Math.round(300 * 0.071429) + ' stone';
-    const temperature = Math.round((94 - 32) * (5 / 9)) + ' centigrade';
-
-    newStory = newStory.replace('94 fahrenheit', temperature);
-    newStory = newStory.replace('300 pounds', weight);
-  }
-
-  story.textContent = newStory;
-  story.style.visibility = 'visible';
+thumbBar.addEventListener('click', (e) => {
+  if(e.target && e.target.nodeName == "IMG") {
+    displayedImage.src = e.target.src;
 }
+}); // Close event listener
+
+  
+/* Wiring up the Darken/Lighten button */
+
+btn.addEventListener('click', (e) => {
+  if (e.target.className == 'dark') {
+    btn.setAttribute('class', 'light');
+    btn.textContent = 'Lighten';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+}
+
+ else {
+    btn.setAttribute('class', 'dark');
+    btn.textContent = 'Darken';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0)';
+}
+}); // Close event listener
