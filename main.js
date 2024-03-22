@@ -1,3 +1,13 @@
+//Name:Ashar Asad
+//Date:2024/03/22
+//Description: In this file we have created all of our code to go with
+//our html file and this contains the script to allow random storys
+//to be generated when a name is enterd
+//
+
+
+
+
 // 1. COMPLETE VARIABLE AND FUNCTION DEFINITIONS
 const customName = document.getElementById('customname');
 const randomize = document.querySelector('.randomize');
