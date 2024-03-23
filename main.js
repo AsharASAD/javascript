@@ -1,103 +1,56 @@
 //Name:Ashar Asad
 //Date:2024/03/22
-//Description:This is the file for our main javascript for bouncing ball application
+//Description: In this file we have created all of our code to go with
+//our html file and this contains the script to allow random storys
+//to be generated when a name is enterd
+//
 
 
 
-const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
 
-const width = canvas.width = window.innerWidth;
-const height = canvas.height = window.innerHeight;
+// 1. COMPLETE VARIABLE AND FUNCTION DEFINITIONS
+const customName = document.getElementById('customname');
+const randomize = document.querySelector('.randomize');
+const story = document.querySelector('.story');
 
-// function to generate random number
-
-function random(min, max) {
-    const num = Math.floor(Math.random() * (max - min + 1)) + min;
-    return num;
+function randomValueFromArray(array) {
+  const random = Math.floor(Math.random() * array.length);
+  return array[random];
 }
 
-function Ball(x, y, velX, velY, color, size) {
-    this.x = x;
-    this.y = y;
-    this.velX = velX;
-    this.velY = velY;
-    this.color = color;
-    this.size = size;
-}
+// 2. RAW TEXT STRINGS
+const storyText = "It was 94 fahrenheit outside, so :insertx: went for a walk. When they got to :inserty:, they stared in horror for a few moments, then :insertz:. Bob saw the whole thing, but was not surprised — :insertx: weighs 300 pounds, and it was a hot day.";
+const insertX = ['Willy the Goblin', 'Big Daddy', 'Father Christmas'];
+const insertY = ['the soup kitchen', 'Disneyland', 'the White House'];
+const insertZ = ['spontaneously combusted', 'melted into a puddle on the sidewalk', 'turned into a slug and crawled away'];
 
+// 3. EVENT LISTENER AND PARTIAL FUNCTION DEFINITION
+randomize.addEventListener('click', result);
 
+function result() {
+  let newStory = storyText;
 
-Ball.prototype.draw = function () {
-    ctx.beginPath();
-    ctx.fillStyle = this.color;
-    ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-    ctx.fill();
-}
+  const xItem = randomValueFromArray(insertX);
+  const yItem = randomValueFromArray(insertY);
+  const zItem = randomValueFromArray(insertZ);
 
-Ball.prototype.update = function () {
-    if ((this.x + this.size) >= width) {
-        this.velX = -(this.velX);
-    }
+  newStory = newStory.replace(":insertx:", xItem);
+  newStory = newStory.replace(":inserty:", yItem);
+  newStory = newStory.replace(":insertz:", zItem);
 
-    if ((this.x - this.size) <= 0) {
-        this.velX = -(this.velX);
-    }
-
-    if ((this.y + this.size) >= height) {
-        this.velY = -(this.velY);
-    }
-
-    if ((this.y - this.size) <= 0) {
-        this.velY = -(this.velY);
-    }
-
-    this.x += this.velX;
-    this.y += this.velY;
-}
-
-Ball.prototype.collisionDetect = function() {
-    for (let j = 0; j < balls.length; j++) {
-      if (!(this === balls[j])) {
-        const dx = this.x - balls[j].x;
-        const dy = this.y - balls[j].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-  
-        if (distance < this.size + balls[j].size) {
-          balls[j].color = this.color = 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) +')';
-        }
-      }
-    }
+  if (customName.value !== '') {
+    const name = customName.value;
+    newStory = newStory.replace('Bob', name);
   }
 
-let balls = [];
+  if (document.getElementById("uk").checked) {
+    const weight = Math.round(300 * 0.071429) + ' stone';
+    const temperature = Math.round((94 - 32) * (5 / 9)) + ' centigrade';
 
-while (balls.length < 25) {
-    let size = random(10, 20);
-    let ball = new Ball(
-        
-        random(0 + size, width - size),
-        random(0 + size, height - size),
-        random(-7, 7),
-        random(-7, 7),
-        'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
-        size
-    );
+    newStory = newStory.replace('94 fahrenheit', temperature);
+    newStory = newStory.replace('300 pounds', weight);
+  }
 
-    balls.push(ball);
+  story.textContent = newStory;
+  story.style.visibility = 'visible';
 }
-
-function loop() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
-    ctx.fillRect(0, 0, width, height);
-
-    for (let i = 0; i < balls.length; i++) {
-        balls[i].draw();
-        balls[i].update();
-        balls[i].collisionDetect();
-    }
-
-    requestAnimationFrame(loop);
-}
-
-loop();
